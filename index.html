@@ -13,9 +13,29 @@
     <title>Miro timer</title>
   </head>
   <body>
-    <header></header>
-    <main></main>
-    <footer></footer>
+    <main>
+      <div class="first" id="first">
+        <div class="miro_timer" id="miro_timer">
+          <div class="change_time" id="change_time">
+            <button class="minus" id="minus">-</button>
+            <input type="text" class="minutes" id="minutes" maxlength="2" />
+            <p class="colon" id="colon">:</p>
+            <input type="text" class="seconds" id="seconds" maxlength="2" />
+            <button class="plus" id="plus">+</button>
+          </div>
+          <div class="pick_music" id="pick_music">
+            <p class="pick_music_p" id="pick_music_p">
+              <span class="music_symbol" id="music_symbol">🎵</span
+              ><span class="pick_text" id="pick_text">Pick music</span>
+            </p>
+          </div>
+        </div>
+        <div class="seperate_line" id="seperate_line"></div>
+        <div class="play_container" id="play_container">
+          <button class="play" id="play">▶</button>
+        </div>
+      </div>
+    </main>
     <script src="script.js"></script>
   </body>
 </html>
