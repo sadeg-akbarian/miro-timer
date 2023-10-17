@@ -29,11 +29,18 @@ main {
   width: 28rem;
 }
 
-/* ....................................................................................................... first.......... */
+/* .............................................................................................. first, timeUp.......... */
 
-.first {
+.first,
+.timeUp,
+.runningTime {
   background-color: white;
   margin: 0.75rem;
+}
+
+/* .................................................................................................. first ............. */
+
+.first {
   display: grid;
   grid-template-columns: 69.5% 0.5% 30%;
 }
@@ -124,4 +131,85 @@ main {
   color: white;
   background-color: blue;
   border-radius: 50%;
+}
+
+/* .................................................................................................. timeUp .............. */
+
+.timeUp {
+  height: 8rem;
+  position: relative;
+  display: none;
+}
+
+/* ................................................................... timeUp_p .............. */
+
+.timeUp_p {
+  width: 100%;
+  text-align: center;
+  font-size: 2.5rem;
+  color: rgb(240, 92, 39);
+  margin-top: 0;
+  position: relative;
+  top: 3rem;
+  transition: top 100ms ease-in-out;
+}
+
+.timeUp_up {
+  top: 0;
+}
+
+/* ............................................................................................ runningTime .............. */
+
+.runningTime {
+  background-image: linear-gradient(
+    to right,
+    var(--timer-background-color) 90%,
+    white 90%
+  );
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.second {
+  margin-left: 4.5rem;
+}
+
+/* ..................................................................... stopPlay.......... */
+
+.stopPlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button1m,
+.button5m {
+  border: 0.15em solid transparent;
+  border-radius: 12px;
+  margin-inline: 10px;
+  background-color: rgb(124, 182, 201);
+}
+
+.button1m:active,
+.button5m:active {
+  border: 0.15em solid black;
+}
+
+.outerStopButton {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: rgb(124, 182, 201);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.stopButton {
+  all: unset;
+  width: 15px;
+  height: 15px;
+  background-color: blue;
 }

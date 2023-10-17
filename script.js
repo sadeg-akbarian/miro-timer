@@ -1,8 +1,12 @@
+const firstContainer = document.querySelector("#first");
 const minutes = document.querySelector("#minutes");
 const seconds = document.querySelector("#seconds");
+const minutesAll = document.querySelectorAll("#minutes");
+const secondsAll = document.querySelectorAll("#seconds");
 const minusButton = document.querySelector("#minus");
 const plusButton = document.querySelector("#plus");
 const playButton = document.querySelector("#play");
+const timeUpContainer = document.querySelector("#timeUp");
 
 localStorage.clear();
 
@@ -18,37 +22,82 @@ localStorage.setItem("currentTime", JSON.stringify(currentTime));
 function renderState() {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   console.log(currentTime);
-  minutes.value = currentTime.minutes;
-  seconds.value = currentTime.seconds;
+  for (let entry of minutesAll) {
+    entry.value = currentTime.minutes;
+  }
+  for (let entry of secondsAll) {
+    entry.value = currentTime.seconds;
+  }
+  // minutes.value = currentTime.minutes;
+  // seconds.value = currentTime.seconds;
+  if (currentTime.minutes === "00") {
+    minusButton.disabled = true;
+    minusButton.style.opacity = "0.25";
+  } else if (currentTime.minutes === "59") {
+    plusButton.disabled = true;
+    plusButton.style.opacity = "0.25";
+  } else if (currentTime.minutese !== "00" && currentTime.minutes !== "59") {
+    minusButton.disabled = false;
+    minusButton.style.opacity = "1";
+    plusButton.disabled = false;
+    plusButton.style.opacity = "1";
+  }
+  if (currentTime.minutes === "00" && currentTime.seconds === "00") {
+    console.log(playButton.disabled);
+    playButton.disabled = true;
+    playButton.style.opacity = "0.25";
+  } else {
+    console.log(playButton.disabled);
+    playButton.disabled = false;
+    playButton.style.opacity = "1";
+  }
+  console.log(playButton.disabled);
+  const wasLooped = JSON.parse(localStorage.getItem("wasLooped"));
+  console.log(wasLooped);
+  if (wasLooped !== null) {
+    firstContainer.style.display = "none";
+    timeUpContainer.style.display = "block";
+  } else {
+    firstContainer.style.display = "grid";
+    timeUpContainer.style.display = "none";
+  }
 }
 
 renderState();
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-minutes.addEventListener("click", function (event) {
-  console.log(event.target.value);
-  event.target.select();
-  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log(currentTime);
-  currentTime.minutes = event.target.value;
-  localStorage.setItem("currentTime", JSON.stringify(currentTime));
-});
+for (let entry of minutesAll) {
+  entry.addEventListener("click", function (event) {
+    console.log("Sadeg");
+    console.log(minutesAll);
+    console.log(event.target.value);
+    event.target.select();
+    const currentTime = JSON.parse(localStorage.getItem("currentTime"));
+    console.log(currentTime);
+    currentTime.minutes = event.target.value;
+    localStorage.setItem("currentTime", JSON.stringify(currentTime));
+  });
+}
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-seconds.addEventListener("click", function (event) {
-  console.log(event.target.value);
-  event.target.select();
-  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log(currentTime);
-  currentTime.seconds = event.target.value;
-  localStorage.setItem("currentTime", JSON.stringify(currentTime));
-});
+for (let entry of secondsAll) {
+  entry.addEventListener("click", function (event) {
+    console.log("Matin");
+    console.log(secondsAll);
+    console.log(event.target.value);
+    event.target.select();
+    const currentTime = JSON.parse(localStorage.getItem("currentTime"));
+    console.log(currentTime);
+    currentTime.seconds = event.target.value;
+    localStorage.setItem("currentTime", JSON.stringify(currentTime));
+  });
+}
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-function degdeg(event, xxx) {
+function changeTime(event) {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   let changedValue = event.target.value;
   console.log(event.target.value);
@@ -58,44 +107,48 @@ function degdeg(event, xxx) {
   }
   console.log(event.target.value);
   console.log(changedValue);
-  const timePart = xxx.id;
-  console.log(timePart);
-  console.log(currentTime[timePart]);
-  currentTime[timePart] = changedValue;
-  console.log(currentTime[timePart]);
+  console.log(event.target.id);
+  console.log(currentTime[event.target.id]);
+  currentTime[event.target.id] = changedValue;
+  console.log(currentTime[event.target.id]);
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-minutes.addEventListener("change", function (event) {
-  degdeg(event, minutes);
-  renderState();
-});
+for (let entry of minutesAll) {
+  entry.addEventListener("change", function (event) {
+    changeTime(event);
+    renderState();
+  });
+}
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-seconds.addEventListener("change", function (event) {
-  degdeg(event, seconds);
-  renderState();
-});
+for (let entry of secondsAll) {
+  entry.addEventListener("change", function (event) {
+    changeTime(event);
+    renderState();
+  });
+}
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 function plusMinus(event) {
-  console.log(minutes.value);
+  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
+  console.log(currentTime);
   console.log("qqqqqqqqqqq");
-  let minutesInNumbers = parseInt(minutes.value);
+  let minutesInNumbers = parseInt(currentTime.minutes);
   console.log(minutesInNumbers);
   console.log(event.target);
   if (event.target === minusButton) {
     console.log("yes");
-    if (minutes.value !== "00") {
+    if (minutesInNumbers !== 0) {
       minutesInNumbers--;
     }
   } else if (event.target === plusButton) {
     console.log("yes");
-    if (minutes.value !== "59") {
+    if (minutesInNumbers !== 59) {
       minutesInNumbers++;
     }
   }
@@ -106,8 +159,7 @@ function plusMinus(event) {
     minutesInString = 0 + minutesInString;
     console.log(minutesInString);
   }
-  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log(currentTime);
+
   currentTime.minutes = minutesInString;
   console.log(currentTime);
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
@@ -127,77 +179,87 @@ plusButton.addEventListener("click", plusMinus);
 function countDown() {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   console.log(currentTime);
+  let changedMinutes = parseInt(currentTime.minutes);
+  console.log(changedMinutes);
   let changedSeconds = parseInt(currentTime.seconds);
   console.log(changedSeconds);
+  const summary = changedMinutes * 60 + changedSeconds;
+  console.log(summary);
+
   if (changedSeconds === 0) {
-    console.log("yes");
-    let changedMinutes = parseInt(currentTime.minutes);
+    changedMinutes--;
     console.log(changedMinutes);
-    if (changedMinutes !== 0) {
-      console.log("Iiiiiiiyyyeeeaaahhhh");
-      changedMinutes--;
-      console.log(changedMinutes);
-      let changedMinutesInString = "" + changedMinutes;
-      console.log(changedMinutesInString);
-      if (changedMinutesInString.length === 1) {
-        console.log("yes");
-        changedMinutesInString = 0 + changedMinutesInString;
-      }
-      console.log(changedMinutesInString);
-      currentTime.minutes = changedMinutesInString;
+    let changedMinutesInString = "" + changedMinutes;
+    console.log(changedMinutesInString);
+    if (changedMinutesInString.length === 1) {
+      changedMinutesInString = 0 + changedMinutesInString;
     }
+    console.log(changedMinutesInString);
+    currentTime.minutes = changedMinutesInString;
     changedSeconds = 59;
   } else {
-    console.log("yes");
     changedSeconds--;
   }
   console.log(changedSeconds);
   let changedSecondsInString = "" + changedSeconds;
   console.log(changedSecondsInString);
   if (changedSecondsInString.length === 1) {
-    console.log("yes");
     changedSecondsInString = 0 + changedSecondsInString;
   }
   console.log(changedSecondsInString);
   currentTime.seconds = changedSecondsInString;
   console.log(currentTime);
-  localStorage.setItem("wasLooped", JSON.stringify({ wasLooped: "yes" }));
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
+  if (currentTime.minutes === "00" && currentTime.seconds === "00") {
+    localStorage.setItem("wasLooped", JSON.stringify({ wasLooped: "yes" }));
+  }
   renderState();
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+function timesUp() {
+  const myInterval = setInterval(startAnimation, 900);
+
+  function startAnimation() {
+    const timeUpP = document.querySelector("#timeUp_p");
+    console.log(timeUpP);
+    timeUpP.classList.add("timeUp_up");
+    setTimeout(() => {
+      timeUpP.classList.remove("timeUp_up");
+    }, 300);
+    timeUpContainer.addEventListener("click", function () {
+      clearInterval(myInterval);
+      localStorage.removeItem("wasLooped");
+      renderState();
+    });
+  }
+}
+
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 playButton.addEventListener("click", function () {
-  const summary = parseInt(minutes.value) * 60 + parseInt(seconds.value);
-  console.log(summary);
-  if (summary !== 0) {
-    const minutesDown = setInterval(playFunction, 1000);
-    console.log("sssssssss");
-    function playFunction() {
-      console.log("Hier issssssssssssssssss");
-      countDown();
-      if (minutes.value === "00") {
-        clearInterval(minutesDown);
+  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
+  console.log(currentTime);
+
+  const tillZero = setInterval(playFunction, 1000);
+  console.log("sssssssss");
+  function playFunction() {
+    console.log("üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü");
+    countDown();
+    const actualizedTime = JSON.parse(localStorage.getItem("currentTime"));
+    if (actualizedTime.seconds === "00") {
+      if (actualizedTime.minutes === "00") {
+        clearInterval(tillZero);
         console.log("Jetzt");
-        const secondsDown = setInterval(playFunction, 1000);
-        console.log("sssssssss");
-        function playFunction() {
-          console.log("üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü");
-          countDown();
-          if (seconds.value === "00") {
-            console.log("Jetzt");
-            clearInterval(secondsDown);
-          }
+        const wasLooped = JSON.parse(localStorage.getItem("wasLooped"));
+        if (wasLooped !== null) {
+          console.log(wasLooped);
+          timesUp();
         }
-        localStorage.removeItem("wasLooped");
       }
     }
   }
-
-  const wasLooped = JSON.parse(localStorage.getItem("wasLooped"));
-  if (wasLooped !== null) {
-    console.log(wasLooped);
-  }
-  console.log(wasLooped);
 });
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
