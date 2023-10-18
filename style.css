@@ -161,12 +161,7 @@ main {
 /* ............................................................................................ runningTime .............. */
 
 .runningTime {
-  background-image: linear-gradient(
-    to right,
-    var(--timer-background-color) 90%,
-    white 90%
-  );
-  display: grid;
+  display: none;
   grid-template-columns: 1fr 1fr;
 }
 
@@ -195,21 +190,31 @@ main {
   border: 0.15em solid black;
 }
 
-.outerStopButton {
-  width: 35px;
-  height: 35px;
+.stopButton {
+  all: unset;
+  width: 29px;
+  height: 33px;
   border-radius: 50%;
   background-color: rgb(124, 182, 201);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding-left: 6px;
+  padding-top: 2px;
   margin-left: 10px;
   margin-right: 10px;
 }
 
-.stopButton {
-  all: unset;
-  width: 15px;
-  height: 15px;
+.play2,
+.pause {
+  width: 35px;
+  height: 35px;
+  color: white;
   background-color: blue;
+  border-radius: 50%;
+}
+
+.play2 {
+  display: none;
+}
+
+.pause {
+  font-weight: bold;
 }

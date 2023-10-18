@@ -7,6 +7,10 @@ const minusButton = document.querySelector("#minus");
 const plusButton = document.querySelector("#plus");
 const playButton = document.querySelector("#play");
 const timeUpContainer = document.querySelector("#timeUp");
+const runningTimeContainer = document.querySelector("#runningTime");
+const stopButton = document.querySelector("#stopButton");
+const play2Button = document.querySelector("#play2");
+const pauseButton = document.querySelector("#pause");
 
 localStorage.clear();
 
@@ -16,6 +20,15 @@ const currentTime = {
 };
 
 localStorage.setItem("currentTime", JSON.stringify(currentTime));
+
+const buttonStatus = {
+  play: "no",
+  stop: "no",
+  play2: "no",
+  pause: "no",
+};
+
+localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -28,8 +41,6 @@ function renderState() {
   for (let entry of secondsAll) {
     entry.value = currentTime.seconds;
   }
-  // minutes.value = currentTime.minutes;
-  // seconds.value = currentTime.seconds;
   if (currentTime.minutes === "00") {
     minusButton.disabled = true;
     minusButton.style.opacity = "0.25";
@@ -54,12 +65,33 @@ function renderState() {
   console.log(playButton.disabled);
   const wasLooped = JSON.parse(localStorage.getItem("wasLooped"));
   console.log(wasLooped);
-  if (wasLooped !== null) {
-    firstContainer.style.display = "none";
-    timeUpContainer.style.display = "block";
-  } else {
+  const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
+  console.log(buttonStatus);
+  if (wasLooped === null && buttonStatus.play === "no") {
+    console.log("yes");
     firstContainer.style.display = "grid";
+    runningTimeContainer.style.display = "none";
     timeUpContainer.style.display = "none";
+  } else if (wasLooped === null && buttonStatus.play === "yes") {
+    console.log("yes");
+    firstContainer.style.display = "none";
+    runningTimeContainer.style.display = "grid";
+    timeUpContainer.style.display = "none";
+    const numberForBackgroundImage =
+      (parseInt(
+        JSON.parse(localStorage.getItem("currentNumberForImageBackground"))
+      ) /
+        parseInt(
+          JSON.parse(localStorage.getItem("startNumberForImageBackground"))
+        )) *
+      100;
+    console.log(numberForBackgroundImage);
+    runningTimeContainer.style.backgroundImage = `linear-gradient(to right, var(--timer-background-color) ${numberForBackgroundImage}%, white ${numberForBackgroundImage}%)`;
+  } else if (wasLooped !== null && buttonStatus.play === "yes") {
+    console.log("yes");
+    firstContainer.style.display = "none";
+    runningTimeContainer.style.display = "none";
+    timeUpContainer.style.display = "block";
   }
 }
 
@@ -185,6 +217,10 @@ function countDown() {
   console.log(changedSeconds);
   const summary = changedMinutes * 60 + changedSeconds;
   console.log(summary);
+  localStorage.setItem(
+    "currentNumberForImageBackground",
+    JSON.stringify(summary)
+  );
 
   if (changedSeconds === 0) {
     changedMinutes--;
@@ -230,7 +266,12 @@ function timesUp() {
     }, 300);
     timeUpContainer.addEventListener("click", function () {
       clearInterval(myInterval);
+      localStorage.removeItem("startNumberForImageBackground");
+      localStorage.removeItem("currentNumberForImageBackground");
       localStorage.removeItem("wasLooped");
+      localStorage.removeItem("buttonStatus");
+      localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
+      console.log("Iyyyeeeaaaah");
       renderState();
     });
   }
@@ -239,9 +280,20 @@ function timesUp() {
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 playButton.addEventListener("click", function () {
+  const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
+  console.log(buttonStatus);
+  buttonStatus.play = "yes";
+  console.log(buttonStatus);
+  localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   console.log(currentTime);
-
+  const startNumberForImageBackground =
+    parseInt(currentTime.minutes) * 60 + parseInt(currentTime.seconds);
+  console.log(startNumberForImageBackground);
+  localStorage.setItem(
+    "startNumberForImageBackground",
+    JSON.stringify(startNumberForImageBackground)
+  );
   const tillZero = setInterval(playFunction, 1000);
   console.log("sssssssss");
   function playFunction() {
