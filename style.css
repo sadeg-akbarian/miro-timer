@@ -29,11 +29,19 @@ main {
   width: 28rem;
 }
 
-/* ....................................................................................................... first.......... */
+/* .............................................................................................. first, timeUp.......... */
 
-.first {
+.first,
+.timeUp,
+.runningTime,
+.stopContainer {
   background-color: white;
   margin: 0.75rem;
+}
+
+/* .................................................................................................. first ............. */
+
+.first {
   display: grid;
   grid-template-columns: 69.5% 0.5% 30%;
 }
@@ -73,6 +81,7 @@ main {
 
 .colon {
   font-size: 1.5rem;
+  margin-right: 0.25rem;
 }
 
 .minus,
@@ -116,6 +125,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .play {
@@ -124,4 +134,203 @@ main {
   color: white;
   background-color: blue;
   border-radius: 50%;
+}
+
+.playHover {
+  position: absolute;
+  top: -0.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  visibility: hidden;
+}
+
+.play:hover + .playHover {
+  visibility: visible;
+}
+
+.playHover > p {
+  font-size: 0.85rem;
+  color: white;
+  background-color: black;
+  border-radius: 0.35rem;
+  padding: 0.5rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0);
+  margin-bottom: 0;
+}
+
+.playTriangle {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid black;
+}
+
+.play:active {
+  background-color: rgb(118, 118, 243);
+  outline: 3px solid red;
+}
+
+/* ............................................................................................ runningTime .............. */
+
+.runningTime {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+
+.second {
+  margin-left: 4.5rem;
+}
+
+/* ..................................................................... stopPlay.......... */
+
+.stopPlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button1m,
+.button5m {
+  border: 0.15em solid transparent;
+  border-radius: 12px;
+  margin-inline: 10px;
+  background-color: rgb(124, 182, 201);
+}
+
+.button1m:active,
+.button5m:active {
+  border: 0.15em solid black;
+}
+
+.stopButton {
+  all: unset;
+  width: 29px;
+  height: 33px;
+  border-radius: 50%;
+  background-color: rgb(124, 182, 201);
+  padding-left: 6px;
+  padding-top: 2px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.play2,
+.pause {
+  width: 35px;
+  height: 35px;
+  color: white;
+  background-color: blue;
+  border-radius: 50%;
+}
+
+.play2 {
+  display: none;
+}
+
+.pause {
+  font-weight: bold;
+}
+
+.stopHover,
+.play2Hover,
+.pauseHover {
+  position: absolute;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  visibility: hidden;
+}
+
+.stopHover {
+  top: -0.7rem;
+  right: 6.3rem;
+}
+
+.play2Hover {
+  top: -0.7rem;
+  right: 3.5rem;
+}
+
+.pauseHover {
+  top: -0.7rem;
+  right: 3.3rem;
+}
+
+.stopButton:hover + .stopHover,
+.play2:hover + .play2Hover,
+.pause:hover + .pauseHover {
+  visibility: visible;
+}
+
+.stopHover > p,
+.play2Hover > p,
+.pauseHover > p {
+  font-size: 0.85rem;
+  color: white;
+  background-color: black;
+  border-radius: 0.35rem;
+  padding: 0.5rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0);
+  margin-bottom: 0;
+}
+
+.stopTriangle,
+.play2Triangle,
+.pauseTriangle {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid black;
+}
+
+/* .................................................................................................. timeUp .............. */
+
+.timeUp {
+  height: 8rem;
+  position: relative;
+  display: none;
+}
+
+/* ................................................................... timeUp_p .............. */
+
+.timeUp_p {
+  width: 100%;
+  text-align: center;
+  font-size: 2.5rem;
+  color: rgb(240, 92, 39);
+  margin-top: 0;
+  position: relative;
+  top: 3rem;
+  transition: top 100ms ease-in-out;
+}
+
+.timeUp_up {
+  top: 0;
+}
+
+/* ........................................................................................ stopContainer ............ */
+
+.stopContainer {
+  height: 8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stopTimer,
+.cancel {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  margin-inline: 1rem;
+  border-radius: 0.5rem;
+}
+
+.stopTimer {
+  color: white;
+  background-color: blue;
 }

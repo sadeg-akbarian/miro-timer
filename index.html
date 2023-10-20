@@ -33,7 +33,48 @@
         <div class="seperate_line" id="seperate_line"></div>
         <div class="play_container" id="play_container">
           <button class="play" id="play">▶</button>
+          <div class="playHover" id="playHover">
+            <p>Start Timer</p>
+            <div class="playTriangle" id="playTriangle"></div>
+          </div>
         </div>
+      </div>
+      <div class="runningTime" id="runningTime">
+        <div class="miro_timer second" id="miro_timer">
+          <div class="change_time" id="change_time">
+            <input type="text" class="minutes" id="minutes" maxlength="2" />
+            <p class="colon" id="colon">:</p>
+            <input type="text" class="seconds" id="seconds" maxlength="2" />
+          </div>
+          <div class="addButtons" id="addButtons">
+            <button class="button1m" id="button1m">+1m</button>
+            <button class="button5m" id="button5m">+5m</button>
+          </div>
+        </div>
+        <div class="stopPlay" id="stopPlay">
+          <button class="stopButton" id="stopButton">&#11035;</button>
+          <div class="stopHover" id="stopHover">
+            <p>Stop</p>
+            <div class="stopTriangle" id="stopTriangle"></div>
+          </div>
+          <button class="play2" id="play2">▶</button>
+          <div class="play2Hover" id="play2Hover">
+            <p>Play</p>
+            <div class="play2Triangle" id="play2Triangle"></div>
+          </div>
+          <button class="pause" id="pause">||</button>
+          <div class="pauseHover" id="pauseHover">
+            <p>Pause</p>
+            <div class="pauseTriangle" id="pauseTriangle"></div>
+          </div>
+        </div>
+      </div>
+      <div class="timeUp" id="timeUp">
+        <p class="timeUp_p" id="timeUp_p">Time's Up</p>
+      </div>
+      <div class="stopContainer" id="stopContainer">
+        <button class="stopTimer" id="stopTimer">Stop timer</button>
+        <button class="cancel" id="cancel">Cancel</button>
       </div>
     </main>
     <script src="script.js"></script>
