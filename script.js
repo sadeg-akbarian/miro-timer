@@ -10,11 +10,14 @@ const playButton = document.querySelector("#play");
 const timeUpContainer = document.querySelector("#timeUp");
 const runningTimeContainer = document.querySelector("#runningTime");
 const stopButton = document.querySelector("#stopButton");
-const allPlayButtons = document.querySelectorAll("#play");
+// const allPlayButtons = document.querySelectorAll("#play");
 const play2Button = document.querySelector("#play2");
 const pauseButton = document.querySelector("#pause");
 const button1m = document.querySelector("#button1m");
 const button5m = document.querySelector("#button5m");
+const stopContainer = document.querySelector("#stopContainer");
+const stopTimerButton = document.querySelector("#stopTimer");
+const cancelButton = document.querySelector("#cancel");
 
 localStorage.clear();
 
@@ -71,26 +74,31 @@ function renderState() {
   console.log(wasLooped);
   const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
   console.log(buttonStatus);
+
   if (wasLooped === null && buttonStatus.play === "no") {
     console.log("yes");
     firstContainer.style.display = "grid";
     runningTimeContainer.style.display = "none";
     timeUpContainer.style.display = "none";
+    stopContainer.style.display = "none";
   } else if (wasLooped === null && buttonStatus.play === "yes") {
     console.log("yes");
     firstContainer.style.display = "none";
     runningTimeContainer.style.display = "grid";
     timeUpContainer.style.display = "none";
-    const numberForBackgroundImage =
-      (parseInt(
-        JSON.parse(localStorage.getItem("currentNumberForImageBackground"))
-      ) /
-        parseInt(
-          JSON.parse(localStorage.getItem("startNumberForImageBackground"))
-        )) *
-      100;
-    console.log(numberForBackgroundImage);
-    runningTimeContainer.style.backgroundImage = `linear-gradient(to right, var(--timer-background-color) ${numberForBackgroundImage}%, white ${numberForBackgroundImage}%)`;
+    stopContainer.style.display = "none";
+
+    if (buttonStatus.pause === "no") {
+      const numberForBackgroundImage =
+        (parseInt(
+          JSON.parse(localStorage.getItem("currentNumberForImageBackground"))
+        ) /
+          parseInt(
+            JSON.parse(localStorage.getItem("startNumberForImageBackground"))
+          )) *
+        100;
+      runningTimeContainer.style.backgroundImage = `linear-gradient(to right, var(--timer-background-color) ${numberForBackgroundImage}%, white ${numberForBackgroundImage}%)`;
+    }
 
     function theOpacity(xxx) {
       for (let i = 0; i < changeTimeContainer.length; i++) {
@@ -101,13 +109,20 @@ function renderState() {
     }
 
     if (buttonStatus.pause === "yes") {
+      console.log("Zigil");
       play2Button.style.display = "block";
       pauseButton.style.display = "none";
       theOpacity(0.15);
     } else if (buttonStatus.play2 === "yes") {
+      console.log("Zigil");
       play2Button.style.display = "none";
       pauseButton.style.display = "block";
       theOpacity(1);
+    } else if (buttonStatus.stop === "yes") {
+      console.log("Zigil");
+      console.log("Jigga");
+      runningTimeContainer.style.display = "none";
+      stopContainer.style.display = "flex";
     }
   } else if (wasLooped !== null && buttonStatus.play === "yes") {
     console.log("yes");
@@ -275,6 +290,18 @@ function countDown() {
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+function cleanStorage() {
+  localStorage.removeItem("startNumberForImageBackground");
+  localStorage.removeItem("currentNumberForImageBackground");
+  localStorage.removeItem("wasLooped");
+  localStorage.removeItem("startDuration");
+  localStorage.removeItem("buttonStatusBeforeStop");
+  localStorage.removeItem("buttonStatus");
+  localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
+}
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 function timesUp() {
   const myInterval = setInterval(startAnimation, 900);
 
@@ -287,11 +314,7 @@ function timesUp() {
     }, 300);
     timeUpContainer.addEventListener("click", function () {
       clearInterval(myInterval);
-      localStorage.removeItem("startNumberForImageBackground");
-      localStorage.removeItem("currentNumberForImageBackground");
-      localStorage.removeItem("wasLooped");
-      localStorage.removeItem("buttonStatus");
-      localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
+      cleanStorage();
       console.log("Iyyyeeeaaaah");
       renderState();
     });
@@ -310,42 +333,44 @@ function addMinutes(xxx) {
   }
   console.log(newMinutes);
   currentTime.minutes = newMinutes;
+  const startNumberForImageBackground =
+    parseInt(currentTime.minutes) * 60 + parseInt(currentTime.seconds);
+  localStorage.setItem(
+    "startNumberForImageBackground",
+    JSON.stringify(startNumberForImageBackground)
+  );
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
+  const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
+  if (buttonStatus.pause === "yes") {
+    renderState();
+  }
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 button1m.addEventListener("click", function () {
   addMinutes(1);
-  renderState();
 });
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 button5m.addEventListener("click", function () {
   addMinutes(5);
-  renderState();
 });
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-function forThePlayButtons(event) {
+function forThePlayButtons() {
   const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
   console.log(buttonStatus);
   buttonStatus.play = "yes";
   buttonStatus.play2 = "yes";
   console.log(buttonStatus);
   localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
+  localStorage.setItem("buttonStatusBeforeStop", JSON.stringify(buttonStatus));
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   console.log(currentTime);
-  if (event.target === allPlayButtons[0]) {
-    console.log("oh jaaaaaaaaaaaa");
-    const startDuration = {
-      startMinute: currentTime.minutes,
-      startSecond: currentTime.seconds,
-    };
-    localStorage.setItem("startDuration", JSON.stringify(startDuration));
-  }
+
   let startNumberForImageBackground = JSON.parse(
     localStorage.getItem("startNumberForImageBackground")
   );
@@ -364,12 +389,25 @@ function forThePlayButtons(event) {
     console.log("üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü");
     countDown();
     const actualizedTime = JSON.parse(localStorage.getItem("currentTime"));
+    const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
     pauseButton.addEventListener("click", function () {
       clearInterval(tillZero);
-      const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
       buttonStatus.stop = "no";
       buttonStatus.play2 = "no";
       buttonStatus.pause = "yes";
+      localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
+      localStorage.setItem(
+        "buttonStatusBeforeStop",
+        JSON.stringify(buttonStatus)
+      );
+
+      renderState();
+    });
+    stopButton.addEventListener("click", function () {
+      clearInterval(tillZero);
+      buttonStatus.stop = "yes";
+      buttonStatus.play2 = "no";
+      buttonStatus.pause = "no";
       localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
       renderState();
     });
@@ -390,8 +428,19 @@ function forThePlayButtons(event) {
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 playButton.addEventListener("click", function (event) {
-  forThePlayButtons(event);
+  console.log(event.target);
+  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
+  console.log("oh jaaaaaaaaaaaa");
+  const startDuration = {
+    startMinute: currentTime.minutes,
+    startSecond: currentTime.seconds,
+  };
+  localStorage.setItem("startDuration", JSON.stringify(startDuration));
+
+  forThePlayButtons();
 });
+
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -400,10 +449,32 @@ play2Button.addEventListener("click", function () {
   buttonStatus.play2 = "yes";
   buttonStatus.pause = "no";
   localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
+  localStorage.setItem("buttonStatusBeforeStop", JSON.stringify(buttonStatus));
   forThePlayButtons();
   renderState();
 });
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-stopButton.addEventListener("click", function () {});
+cancelButton.addEventListener("click", function () {
+  const buttonStatusBeforeStop = JSON.parse(
+    localStorage.getItem("buttonStatusBeforeStop")
+  );
+  localStorage.setItem("buttonStatus", JSON.stringify(buttonStatusBeforeStop));
+  if (buttonStatusBeforeStop.play2 === "yes") {
+    forThePlayButtons();
+  }
+  renderState();
+});
+
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+stopTimerButton.addEventListener("click", function () {
+  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
+  const startDuration = JSON.parse(localStorage.getItem("startDuration"));
+  currentTime.minutes = startDuration.startMinute;
+  currentTime.seconds = startDuration.startSecond;
+  localStorage.setItem("currentTime", JSON.stringify(currentTime));
+  cleanStorage();
+  renderState();
+});
