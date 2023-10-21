@@ -88,17 +88,15 @@ function renderState() {
     timeUpContainer.style.display = "none";
     stopContainer.style.display = "none";
 
-    if (buttonStatus.pause === "no") {
-      const numberForBackgroundImage =
-        (parseInt(
-          JSON.parse(localStorage.getItem("currentNumberForImageBackground"))
-        ) /
-          parseInt(
-            JSON.parse(localStorage.getItem("startNumberForImageBackground"))
-          )) *
-        100;
-      runningTimeContainer.style.backgroundImage = `linear-gradient(to right, var(--timer-background-color) ${numberForBackgroundImage}%, white ${numberForBackgroundImage}%)`;
-    }
+    const numberForBackgroundImage =
+      (parseInt(
+        JSON.parse(localStorage.getItem("currentNumberForImageBackground"))
+      ) /
+        parseInt(
+          JSON.parse(localStorage.getItem("startNumberForImageBackground"))
+        )) *
+      100;
+    runningTimeContainer.style.backgroundImage = `linear-gradient(to right, var(--timer-background-color) ${numberForBackgroundImage}%, white ${numberForBackgroundImage}%)`;
 
     function theOpacity(xxx) {
       for (let i = 0; i < changeTimeContainer.length; i++) {
@@ -256,7 +254,7 @@ function countDown() {
   console.log(summary);
   localStorage.setItem(
     "currentNumberForImageBackground",
-    JSON.stringify(summary)
+    JSON.stringify(summary - 1)
   );
   if (changedSeconds === 0) {
     changedMinutes--;
@@ -339,11 +337,12 @@ function addMinutes(xxx) {
     "startNumberForImageBackground",
     JSON.stringify(startNumberForImageBackground)
   );
+  localStorage.setItem(
+    "currentNumberForImageBackground",
+    JSON.stringify(startNumberForImageBackground)
+  );
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
-  const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
-  if (buttonStatus.pause === "yes") {
-    renderState();
-  }
+  renderState();
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -382,7 +381,12 @@ function forThePlayButtons() {
       "startNumberForImageBackground",
       JSON.stringify(startNumberForImageBackground)
     );
+    localStorage.setItem(
+      "currentNumberForImageBackground",
+      JSON.stringify(startNumberForImageBackground)
+    );
   }
+  renderState();
   const tillZero = setInterval(playFunction, 1000);
   console.log("sssssssss");
   function playFunction() {
