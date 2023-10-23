@@ -247,7 +247,13 @@ function timesUp() {
     }, 300);
     timeUpContainer.addEventListener("click", function () {
       clearInterval(myInterval);
+      const startDuration = JSON.parse(localStorage.getItem("startDuration"));
       cleanStorage();
+      const currentTime = {
+        minutes: startDuration.startMinute,
+        seconds: startDuration.startSecond,
+      };
+      localStorage.setItem("currentTime", JSON.stringify(currentTime));
       renderState();
     });
   }
@@ -327,7 +333,7 @@ stopButton.addEventListener("click", function () {
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-playButton.addEventListener("click", function (event) {
+playButton.addEventListener("click", function () {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   const startDuration = {
     startMinute: currentTime.minutes,
