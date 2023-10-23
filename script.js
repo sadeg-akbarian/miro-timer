@@ -1,4 +1,3 @@
-const firstContainer = document.querySelector("#first");
 const changeTimeContainer = document.querySelectorAll("#change_time");
 const minutes = document.querySelector("#minutes");
 const seconds = document.querySelector("#seconds");
@@ -74,7 +73,7 @@ function renderState() {
   console.log(wasLooped);
   const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
   console.log(buttonStatus);
-
+  const firstContainer = document.querySelector("#first");
   if (wasLooped === null && buttonStatus.play === "no") {
     console.log("yes");
     firstContainer.style.display = "grid";
