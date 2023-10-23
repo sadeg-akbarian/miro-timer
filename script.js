@@ -1,22 +1,11 @@
-const changeTimeContainer = document.querySelectorAll("#change_time");
-const minutes = document.querySelector("#minutes");
-const seconds = document.querySelector("#seconds");
 const minutesAll = document.querySelectorAll("#minutes");
 const secondsAll = document.querySelectorAll("#seconds");
 const minusButton = document.querySelector("#minus");
 const plusButton = document.querySelector("#plus");
 const playButton = document.querySelector("#play");
 const timeUpContainer = document.querySelector("#timeUp");
-const runningTimeContainer = document.querySelector("#runningTime");
-const stopButton = document.querySelector("#stopButton");
-// const allPlayButtons = document.querySelectorAll("#play");
 const play2Button = document.querySelector("#play2");
 const pauseButton = document.querySelector("#pause");
-const button1m = document.querySelector("#button1m");
-const button5m = document.querySelector("#button5m");
-const stopContainer = document.querySelector("#stopContainer");
-const stopTimerButton = document.querySelector("#stopTimer");
-const cancelButton = document.querySelector("#cancel");
 
 localStorage.clear();
 
@@ -74,6 +63,8 @@ function renderState() {
   const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
   console.log(buttonStatus);
   const firstContainer = document.querySelector("#first");
+  const runningTimeContainer = document.querySelector("#runningTime");
+  const stopContainer = document.querySelector("#stopContainer");
   if (wasLooped === null && buttonStatus.play === "no") {
     console.log("yes");
     firstContainer.style.display = "grid";
@@ -98,6 +89,7 @@ function renderState() {
     runningTimeContainer.style.backgroundImage = `linear-gradient(to right, var(--timer-background-color) ${numberForBackgroundImage}%, white ${numberForBackgroundImage}%)`;
 
     function theOpacity(xxx) {
+      const changeTimeContainer = document.querySelectorAll("#change_time");
       for (let i = 0; i < changeTimeContainer.length; i++) {
         if (i === 1) {
           changeTimeContainer[i].style.opacity = "" + xxx;
@@ -346,12 +338,14 @@ function addMinutes(xxx) {
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+const button1m = document.querySelector("#button1m");
 button1m.addEventListener("click", function () {
   addMinutes(1);
 });
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+const button5m = document.querySelector("#button5m");
 button5m.addEventListener("click", function () {
   addMinutes(5);
 });
@@ -406,6 +400,7 @@ function forThePlayButtons() {
 
       renderState();
     });
+    const stopButton = document.querySelector("#stopButton");
     stopButton.addEventListener("click", function () {
       clearInterval(tillZero);
       buttonStatus.stop = "yes";
@@ -445,8 +440,6 @@ playButton.addEventListener("click", function (event) {
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 play2Button.addEventListener("click", function () {
   buttonStatus.stop = "no";
   buttonStatus.play2 = "yes";
@@ -459,6 +452,7 @@ play2Button.addEventListener("click", function () {
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+const cancelButton = document.querySelector("#cancel");
 cancelButton.addEventListener("click", function () {
   const buttonStatusBeforeStop = JSON.parse(
     localStorage.getItem("buttonStatusBeforeStop")
@@ -472,6 +466,7 @@ cancelButton.addEventListener("click", function () {
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+const stopTimerButton = document.querySelector("#stopTimer");
 stopTimerButton.addEventListener("click", function () {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   const startDuration = JSON.parse(localStorage.getItem("startDuration"));
