@@ -255,6 +255,8 @@ function timesUp() {
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+let intervalID;
+
 function forThePlayButtons() {
   const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
   buttonStatus.play = "yes";
@@ -280,32 +282,10 @@ function forThePlayButtons() {
   }
   renderState();
   const tillZero = setInterval(playFunction, 1000);
+  intervalID = tillZero;
   function playFunction() {
     countDown();
     const actualizedTime = JSON.parse(localStorage.getItem("currentTime"));
-    const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
-    pauseButton.addEventListener("click", function () {
-      clearInterval(tillZero);
-      buttonStatus.stop = "no";
-      buttonStatus.play2 = "no";
-      buttonStatus.pause = "yes";
-      localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
-      localStorage.setItem(
-        "buttonStatusBeforeStop",
-        JSON.stringify(buttonStatus)
-      );
-
-      renderState();
-    });
-    const stopButton = document.querySelector("#stopButton");
-    stopButton.addEventListener("click", function () {
-      clearInterval(tillZero);
-      buttonStatus.stop = "yes";
-      buttonStatus.play2 = "no";
-      buttonStatus.pause = "no";
-      localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
-      renderState();
-    });
     if (actualizedTime.seconds === "00") {
       if (actualizedTime.minutes === "00") {
         clearInterval(tillZero);
@@ -317,6 +297,33 @@ function forThePlayButtons() {
     }
   }
 }
+
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+pauseButton.addEventListener("click", function () {
+  const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
+  clearInterval(intervalID);
+  buttonStatus.stop = "no";
+  buttonStatus.play2 = "no";
+  buttonStatus.pause = "yes";
+  localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
+  localStorage.setItem("buttonStatusBeforeStop", JSON.stringify(buttonStatus));
+
+  renderState();
+});
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+const stopButton = document.querySelector("#stopButton");
+stopButton.addEventListener("click", function () {
+  const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
+  clearInterval(intervalID);
+  buttonStatus.stop = "yes";
+  buttonStatus.play2 = "no";
+  buttonStatus.pause = "no";
+  localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
+  renderState();
+});
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
