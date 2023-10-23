@@ -1,23 +1,11 @@
-const firstContainer = document.querySelector("#first");
-const changeTimeContainer = document.querySelectorAll("#change_time");
-const minutes = document.querySelector("#minutes");
-const seconds = document.querySelector("#seconds");
 const minutesAll = document.querySelectorAll("#minutes");
 const secondsAll = document.querySelectorAll("#seconds");
 const minusButton = document.querySelector("#minus");
 const plusButton = document.querySelector("#plus");
 const playButton = document.querySelector("#play");
 const timeUpContainer = document.querySelector("#timeUp");
-const runningTimeContainer = document.querySelector("#runningTime");
-const stopButton = document.querySelector("#stopButton");
-// const allPlayButtons = document.querySelectorAll("#play");
 const play2Button = document.querySelector("#play2");
 const pauseButton = document.querySelector("#pause");
-const button1m = document.querySelector("#button1m");
-const button5m = document.querySelector("#button5m");
-const stopContainer = document.querySelector("#stopContainer");
-const stopTimerButton = document.querySelector("#stopTimer");
-const cancelButton = document.querySelector("#cancel");
 
 localStorage.clear();
 
@@ -41,7 +29,6 @@ localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
 
 function renderState() {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log(currentTime);
   for (let entry of minutesAll) {
     entry.value = currentTime.minutes;
   }
@@ -61,28 +48,23 @@ function renderState() {
     plusButton.style.opacity = "1";
   }
   if (currentTime.minutes === "00" && currentTime.seconds === "00") {
-    console.log(playButton.disabled);
     playButton.disabled = true;
     playButton.style.opacity = "0.25";
   } else {
-    console.log(playButton.disabled);
     playButton.disabled = false;
     playButton.style.opacity = "1";
   }
-  console.log(playButton.disabled);
   const wasLooped = JSON.parse(localStorage.getItem("wasLooped"));
-  console.log(wasLooped);
   const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
-  console.log(buttonStatus);
-
+  const firstContainer = document.querySelector("#first");
+  const runningTimeContainer = document.querySelector("#runningTime");
+  const stopContainer = document.querySelector("#stopContainer");
   if (wasLooped === null && buttonStatus.play === "no") {
-    console.log("yes");
     firstContainer.style.display = "grid";
     runningTimeContainer.style.display = "none";
     timeUpContainer.style.display = "none";
     stopContainer.style.display = "none";
   } else if (wasLooped === null && buttonStatus.play === "yes") {
-    console.log("yes");
     firstContainer.style.display = "none";
     runningTimeContainer.style.display = "grid";
     timeUpContainer.style.display = "none";
@@ -99,6 +81,7 @@ function renderState() {
     runningTimeContainer.style.backgroundImage = `linear-gradient(to right, var(--timer-background-color) ${numberForBackgroundImage}%, white ${numberForBackgroundImage}%)`;
 
     function theOpacity(xxx) {
+      const changeTimeContainer = document.querySelectorAll("#change_time");
       for (let i = 0; i < changeTimeContainer.length; i++) {
         if (i === 1) {
           changeTimeContainer[i].style.opacity = "" + xxx;
@@ -107,23 +90,18 @@ function renderState() {
     }
 
     if (buttonStatus.pause === "yes") {
-      console.log("Zigil");
       play2Button.style.display = "block";
       pauseButton.style.display = "none";
       theOpacity(0.15);
     } else if (buttonStatus.play2 === "yes") {
-      console.log("Zigil");
       play2Button.style.display = "none";
       pauseButton.style.display = "block";
       theOpacity(1);
     } else if (buttonStatus.stop === "yes") {
-      console.log("Zigil");
-      console.log("Jigga");
       runningTimeContainer.style.display = "none";
       stopContainer.style.display = "flex";
     }
   } else if (wasLooped !== null && buttonStatus.play === "yes") {
-    console.log("yes");
     firstContainer.style.display = "none";
     runningTimeContainer.style.display = "none";
     timeUpContainer.style.display = "block";
@@ -136,29 +114,15 @@ renderState();
 
 for (let entry of minutesAll) {
   entry.addEventListener("click", function (event) {
-    console.log("Sadeg");
-    console.log(minutesAll);
-    console.log(event.target.value);
     event.target.select();
-    const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-    console.log(currentTime);
-    currentTime.minutes = event.target.value;
-    localStorage.setItem("currentTime", JSON.stringify(currentTime));
   });
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 for (let entry of secondsAll) {
   entry.addEventListener("click", function (event) {
-    console.log("Matin");
-    console.log(secondsAll);
-    console.log(event.target.value);
     event.target.select();
-    const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-    console.log(currentTime);
-    currentTime.seconds = event.target.value;
-    localStorage.setItem("currentTime", JSON.stringify(currentTime));
   });
 }
 
@@ -167,21 +131,14 @@ for (let entry of secondsAll) {
 function changeTime(event) {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   let changedValue = event.target.value;
-  console.log(event.target.value);
-  console.log(changedValue.length);
   if (changedValue.length === 1) {
     changedValue = 0 + changedValue;
   }
-  console.log(event.target.value);
-  console.log(changedValue);
-  console.log(event.target.id);
-  console.log(currentTime[event.target.id]);
   currentTime[event.target.id] = changedValue;
-  console.log(currentTime[event.target.id]);
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 for (let entry of minutesAll) {
   entry.addEventListener("change", function (event) {
@@ -190,7 +147,7 @@ for (let entry of minutesAll) {
   });
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 for (let entry of secondsAll) {
   entry.addEventListener("change", function (event) {
@@ -203,41 +160,31 @@ for (let entry of secondsAll) {
 
 function plusMinus(event) {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log(currentTime);
-  console.log("qqqqqqqqqqq");
   let minutesInNumbers = parseInt(currentTime.minutes);
-  console.log(minutesInNumbers);
-  console.log(event.target);
   if (event.target === minusButton) {
-    console.log("yes");
     if (minutesInNumbers !== 0) {
       minutesInNumbers--;
     }
   } else if (event.target === plusButton) {
-    console.log("yes");
     if (minutesInNumbers !== 59) {
       minutesInNumbers++;
     }
   }
-  console.log(minutesInNumbers);
   let minutesInString = "" + minutesInNumbers;
-  console.log(minutesInString);
   if (minutesInString.length === 1) {
     minutesInString = 0 + minutesInString;
-    console.log(minutesInString);
   }
 
   currentTime.minutes = minutesInString;
-  console.log(currentTime);
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
   renderState();
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 minusButton.addEventListener("click", plusMinus);
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 plusButton.addEventListener("click", plusMinus);
 
@@ -245,40 +192,29 @@ plusButton.addEventListener("click", plusMinus);
 
 function countDown() {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log(currentTime);
   let changedMinutes = parseInt(currentTime.minutes);
-  console.log(changedMinutes);
   let changedSeconds = parseInt(currentTime.seconds);
-  console.log(changedSeconds);
   const summary = changedMinutes * 60 + changedSeconds;
-  console.log(summary);
   localStorage.setItem(
     "currentNumberForImageBackground",
     JSON.stringify(summary - 1)
   );
   if (changedSeconds === 0) {
     changedMinutes--;
-    console.log(changedMinutes);
     let changedMinutesInString = "" + changedMinutes;
-    console.log(changedMinutesInString);
     if (changedMinutesInString.length === 1) {
       changedMinutesInString = 0 + changedMinutesInString;
     }
-    console.log(changedMinutesInString);
     currentTime.minutes = changedMinutesInString;
     changedSeconds = 59;
   } else {
     changedSeconds--;
   }
-  console.log(changedSeconds);
   let changedSecondsInString = "" + changedSeconds;
-  console.log(changedSecondsInString);
   if (changedSecondsInString.length === 1) {
     changedSecondsInString = 0 + changedSecondsInString;
   }
-  console.log(changedSecondsInString);
   currentTime.seconds = changedSecondsInString;
-  console.log(currentTime);
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
   if (currentTime.minutes === "00" && currentTime.seconds === "00") {
     localStorage.setItem("wasLooped", JSON.stringify({ wasLooped: "yes" }));
@@ -305,7 +241,6 @@ function timesUp() {
 
   function startAnimation() {
     const timeUpP = document.querySelector("#timeUp_p");
-    console.log(timeUpP);
     timeUpP.classList.add("timeUp_up");
     setTimeout(() => {
       timeUpP.classList.remove("timeUp_up");
@@ -313,7 +248,6 @@ function timesUp() {
     timeUpContainer.addEventListener("click", function () {
       clearInterval(myInterval);
       cleanStorage();
-      console.log("Iyyyeeeaaaah");
       renderState();
     });
   }
@@ -321,54 +255,13 @@ function timesUp() {
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-function addMinutes(xxx) {
-  console.log("üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü");
-  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log(currentTime);
-  let newMinutes = "" + (parseInt(currentTime.minutes) + xxx);
-  if (newMinutes.length === 1) {
-    newMinutes = 0 + newMinutes;
-  }
-  console.log(newMinutes);
-  currentTime.minutes = newMinutes;
-  const startNumberForImageBackground =
-    parseInt(currentTime.minutes) * 60 + parseInt(currentTime.seconds);
-  localStorage.setItem(
-    "startNumberForImageBackground",
-    JSON.stringify(startNumberForImageBackground)
-  );
-  localStorage.setItem(
-    "currentNumberForImageBackground",
-    JSON.stringify(startNumberForImageBackground)
-  );
-  localStorage.setItem("currentTime", JSON.stringify(currentTime));
-  renderState();
-}
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-button1m.addEventListener("click", function () {
-  addMinutes(1);
-});
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-button5m.addEventListener("click", function () {
-  addMinutes(5);
-});
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 function forThePlayButtons() {
   const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
-  console.log(buttonStatus);
   buttonStatus.play = "yes";
   buttonStatus.play2 = "yes";
-  console.log(buttonStatus);
   localStorage.setItem("buttonStatus", JSON.stringify(buttonStatus));
   localStorage.setItem("buttonStatusBeforeStop", JSON.stringify(buttonStatus));
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log(currentTime);
 
   let startNumberForImageBackground = JSON.parse(
     localStorage.getItem("startNumberForImageBackground")
@@ -376,7 +269,6 @@ function forThePlayButtons() {
   if (startNumberForImageBackground === null) {
     startNumberForImageBackground =
       parseInt(currentTime.minutes) * 60 + parseInt(currentTime.seconds);
-    console.log(startNumberForImageBackground);
     localStorage.setItem(
       "startNumberForImageBackground",
       JSON.stringify(startNumberForImageBackground)
@@ -388,9 +280,7 @@ function forThePlayButtons() {
   }
   renderState();
   const tillZero = setInterval(playFunction, 1000);
-  console.log("sssssssss");
   function playFunction() {
-    console.log("üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü");
     countDown();
     const actualizedTime = JSON.parse(localStorage.getItem("currentTime"));
     const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
@@ -407,6 +297,7 @@ function forThePlayButtons() {
 
       renderState();
     });
+    const stopButton = document.querySelector("#stopButton");
     stopButton.addEventListener("click", function () {
       clearInterval(tillZero);
       buttonStatus.stop = "yes";
@@ -418,10 +309,8 @@ function forThePlayButtons() {
     if (actualizedTime.seconds === "00") {
       if (actualizedTime.minutes === "00") {
         clearInterval(tillZero);
-        console.log("Jetzt");
         const wasLooped = JSON.parse(localStorage.getItem("wasLooped"));
         if (wasLooped !== null) {
-          console.log(wasLooped);
           timesUp();
         }
       }
@@ -432,9 +321,7 @@ function forThePlayButtons() {
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 playButton.addEventListener("click", function (event) {
-  console.log(event.target);
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  console.log("oh jaaaaaaaaaaaa");
   const startDuration = {
     startMinute: currentTime.minutes,
     startSecond: currentTime.seconds,
@@ -443,8 +330,6 @@ playButton.addEventListener("click", function (event) {
 
   forThePlayButtons();
 });
-
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -460,6 +345,7 @@ play2Button.addEventListener("click", function () {
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+const cancelButton = document.querySelector("#cancel");
 cancelButton.addEventListener("click", function () {
   const buttonStatusBeforeStop = JSON.parse(
     localStorage.getItem("buttonStatusBeforeStop")
@@ -473,6 +359,7 @@ cancelButton.addEventListener("click", function () {
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+const stopTimerButton = document.querySelector("#stopTimer");
 stopTimerButton.addEventListener("click", function () {
   const currentTime = JSON.parse(localStorage.getItem("currentTime"));
   const startDuration = JSON.parse(localStorage.getItem("startDuration"));
@@ -482,3 +369,42 @@ stopTimerButton.addEventListener("click", function () {
   cleanStorage();
   renderState();
 });
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+function addMinutes(xxx) {
+  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
+  let newMinutes = "" + (parseInt(currentTime.minutes) + xxx);
+  if (newMinutes.length === 1) {
+    newMinutes = 0 + newMinutes;
+  }
+  currentTime.minutes = newMinutes;
+  const startNumberForImageBackground =
+    parseInt(currentTime.minutes) * 60 + parseInt(currentTime.seconds);
+  localStorage.setItem(
+    "startNumberForImageBackground",
+    JSON.stringify(startNumberForImageBackground)
+  );
+  localStorage.setItem(
+    "currentNumberForImageBackground",
+    JSON.stringify(startNumberForImageBackground)
+  );
+  localStorage.setItem("currentTime", JSON.stringify(currentTime));
+  renderState();
+}
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+const button1m = document.querySelector("#button1m");
+button1m.addEventListener("click", function () {
+  addMinutes(1);
+});
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+const button5m = document.querySelector("#button5m");
+button5m.addEventListener("click", function () {
+  addMinutes(5);
+});
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
