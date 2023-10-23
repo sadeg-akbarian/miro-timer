@@ -115,20 +115,14 @@ renderState();
 for (let entry of minutesAll) {
   entry.addEventListener("click", function (event) {
     event.target.select();
-    const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-    currentTime.minutes = event.target.value;
-    localStorage.setItem("currentTime", JSON.stringify(currentTime));
   });
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 for (let entry of secondsAll) {
   entry.addEventListener("click", function (event) {
     event.target.select();
-    const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-    currentTime.seconds = event.target.value;
-    localStorage.setItem("currentTime", JSON.stringify(currentTime));
   });
 }
 
@@ -144,7 +138,7 @@ function changeTime(event) {
   localStorage.setItem("currentTime", JSON.stringify(currentTime));
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 for (let entry of minutesAll) {
   entry.addEventListener("change", function (event) {
@@ -153,7 +147,7 @@ for (let entry of minutesAll) {
   });
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 for (let entry of secondsAll) {
   entry.addEventListener("change", function (event) {
@@ -186,11 +180,11 @@ function plusMinus(event) {
   renderState();
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 minusButton.addEventListener("click", plusMinus);
 
-// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 plusButton.addEventListener("click", plusMinus);
 
@@ -260,43 +254,6 @@ function timesUp() {
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-function addMinutes(xxx) {
-  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
-  let newMinutes = "" + (parseInt(currentTime.minutes) + xxx);
-  if (newMinutes.length === 1) {
-    newMinutes = 0 + newMinutes;
-  }
-  currentTime.minutes = newMinutes;
-  const startNumberForImageBackground =
-    parseInt(currentTime.minutes) * 60 + parseInt(currentTime.seconds);
-  localStorage.setItem(
-    "startNumberForImageBackground",
-    JSON.stringify(startNumberForImageBackground)
-  );
-  localStorage.setItem(
-    "currentNumberForImageBackground",
-    JSON.stringify(startNumberForImageBackground)
-  );
-  localStorage.setItem("currentTime", JSON.stringify(currentTime));
-  renderState();
-}
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-const button1m = document.querySelector("#button1m");
-button1m.addEventListener("click", function () {
-  addMinutes(1);
-});
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-const button5m = document.querySelector("#button5m");
-button5m.addEventListener("click", function () {
-  addMinutes(5);
-});
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 function forThePlayButtons() {
   const buttonStatus = JSON.parse(localStorage.getItem("buttonStatus"));
@@ -412,3 +369,42 @@ stopTimerButton.addEventListener("click", function () {
   cleanStorage();
   renderState();
 });
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+function addMinutes(xxx) {
+  const currentTime = JSON.parse(localStorage.getItem("currentTime"));
+  let newMinutes = "" + (parseInt(currentTime.minutes) + xxx);
+  if (newMinutes.length === 1) {
+    newMinutes = 0 + newMinutes;
+  }
+  currentTime.minutes = newMinutes;
+  const startNumberForImageBackground =
+    parseInt(currentTime.minutes) * 60 + parseInt(currentTime.seconds);
+  localStorage.setItem(
+    "startNumberForImageBackground",
+    JSON.stringify(startNumberForImageBackground)
+  );
+  localStorage.setItem(
+    "currentNumberForImageBackground",
+    JSON.stringify(startNumberForImageBackground)
+  );
+  localStorage.setItem("currentTime", JSON.stringify(currentTime));
+  renderState();
+}
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+const button1m = document.querySelector("#button1m");
+button1m.addEventListener("click", function () {
+  addMinutes(1);
+});
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+const button5m = document.querySelector("#button5m");
+button5m.addEventListener("click", function () {
+  addMinutes(5);
+});
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
