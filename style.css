@@ -60,6 +60,8 @@ main {
   align-items: center;
   justify-content: center;
   margin-top: 7px;
+  opacity: 1;
+  transition: opacity 500ms ease-out;
 }
 
 .minutes,
